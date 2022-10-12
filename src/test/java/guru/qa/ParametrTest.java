@@ -1,13 +1,17 @@
 package guru.qa;
 
+import guru.qa.data.Locale;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 
 public class ParametrTest {
@@ -33,6 +37,13 @@ public class ParametrTest {
         $("button[type='submit']").click();
         $x("//*[@id=\"block_left_pad\"]/div/div[2]/div/div[2]/p/a")
                 .shouldHave(text(expectedText));
+    }
+
+    @EnumSource(Locale.class)
+    @ParameterizedTest
+    void siteButtonText(Locale locale){
+        open("https://ru.selenide.org/");
+        $$("#languages a").find(text(locale.name())).shouldBe(visible);
     }
 
     @Disabled
